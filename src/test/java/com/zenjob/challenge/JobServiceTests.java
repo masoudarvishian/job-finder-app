@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @SpringBootTest
@@ -68,5 +70,22 @@ public class JobServiceTests {
         Shift shift = job.getShifts().get(0);
         Duration shiftDuration = Duration.between(shift.getStartTime(), shift.getEndTime());
         Assertions.assertEquals(8, shiftDuration.toHours());
+    }
+
+    @Test
+    public void job_hours_should_not_be_out_of_scope() {
+        // given
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(1);
+
+        // when
+        Job job = jobService.createJob(UUID.randomUUID(), startDate, endDate);
+
+        // then
+        ZonedDateTime zonedStartDateTime = job.getStartTime().atZone(ZoneId.systemDefault());
+        ZonedDateTime zonedEndDateTime = job.getEndTime().atZone(ZoneId.systemDefault());
+        int startHour = zonedStartDateTime.getHour();
+        int endHour = zonedEndDateTime.getHour();
+        Assertions.assertTrue(startHour >= 9 && endHour <= 17);
     }
 }
