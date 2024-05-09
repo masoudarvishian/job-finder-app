@@ -12,4 +12,7 @@ spring:
   application:
     name: backend-challenge
 server.servlet.context-path: /${spring.application.name}
+logging:
+  level:
+    root: DEBUG
 
