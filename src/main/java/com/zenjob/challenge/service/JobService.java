@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -23,15 +24,15 @@ public class JobService {
     private final JobRepository   jobRepository;
     private final ShiftRepository shiftRepository;
 
-    public Job createJob(UUID uuid, LocalDate date1, LocalDate date2) {
+    public Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
         Job job = Job.builder()
-                .id(uuid)
-                .companyId(UUID.randomUUID())
-                .startTime(date1.atTime(8, 0, 0).toInstant(ZoneOffset.UTC))
-                .endTime(date2.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
+                .id(UUID.randomUUID())
+                .companyId(companyId)
+                .startTime(startDate.atTime(8, 0, 0).toInstant(ZoneOffset.UTC))
+                .endTime(endDate.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
                 .build();
-        job.setShifts(LongStream.range(0, ChronoUnit.DAYS.between(date1, date2))
-                .mapToObj(idx -> date1.plus(idx, ChronoUnit.DAYS))
+        job.setShifts(LongStream.range(0, ChronoUnit.DAYS.between(startDate, endDate))
+                .mapToObj(idx -> startDate.plus(idx, ChronoUnit.DAYS))
                 .map(date -> Shift.builder()
                         .id(UUID.randomUUID())
                         .job(job)
@@ -47,6 +48,7 @@ public class JobService {
     }
 
     public void bookTalent(UUID talent, UUID shiftId) {
-        shiftRepository.findById(shiftId).map(shift -> shiftRepository.save(shift.setTalentId(talent)));
+        Optional<Shift> shiftById = shiftRepository.findById(shiftId);
+        shiftById.map(shift -> shiftRepository.save(shift.setTalentId(talent)));
     }
 }
