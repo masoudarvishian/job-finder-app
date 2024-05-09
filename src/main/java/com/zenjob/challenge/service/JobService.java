@@ -1,13 +1,12 @@
 package com.zenjob.challenge.service;
 
+import com.zenjob.challenge.customexception.InvalidEndDateException;
+import com.zenjob.challenge.customexception.InvalidStartDateException;
 import com.zenjob.challenge.entity.Job;
 import com.zenjob.challenge.entity.Shift;
 import com.zenjob.challenge.repository.JobRepository;
 import com.zenjob.challenge.repository.ShiftRepository;
-import jdk.vm.ci.meta.Local;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,10 @@ public class JobService implements IJobService {
     public Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
 
         if (startDate.isBefore(LocalDate.now()))
-            throw new IllegalArgumentException();
+            throw new InvalidStartDateException();
+
+        if (endDate.isBefore(startDate))
+            throw new InvalidEndDateException();
 
         Job job = Job.builder()
                 .id(UUID.randomUUID())

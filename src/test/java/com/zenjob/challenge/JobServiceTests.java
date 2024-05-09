@@ -1,5 +1,7 @@
 package com.zenjob.challenge;
 
+import com.zenjob.challenge.customexception.InvalidEndDateException;
+import com.zenjob.challenge.customexception.InvalidStartDateException;
 import com.zenjob.challenge.entity.Job;
 import com.zenjob.challenge.service.IJobService;
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +33,16 @@ public class JobServiceTests {
         LocalDate startDate = LocalDate.now().minusDays(10);
         LocalDate endDate = LocalDate.now().plusDays(2);
 
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
+        Assertions.assertThrows(InvalidStartDateException.class, () ->
+                jobService.createJob(UUID.randomUUID(), startDate, endDate));
+    }
+
+    @Test
+    public void the_end_date_should_be_after_the_start_date() {
+        LocalDate startDate = LocalDate.now().plusDays(1);
+        LocalDate endDate = LocalDate.now();
+
+        Assertions.assertThrows(InvalidEndDateException.class, () ->
                 jobService.createJob(UUID.randomUUID(), startDate, endDate));
     }
 
