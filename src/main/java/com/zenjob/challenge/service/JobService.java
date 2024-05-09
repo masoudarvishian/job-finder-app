@@ -37,7 +37,7 @@ public class JobService implements IJobService {
         Job job = Job.builder()
                 .id(UUID.randomUUID())
                 .companyId(companyId)
-                .startTime(startDate.atTime(8, 0, 0).toInstant(ZoneOffset.UTC))
+                .startTime(startDate.atTime(9, 0, 0).toInstant(ZoneOffset.UTC))
                 .endTime(endDate.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
                 .build();
         job.setShifts(LongStream.range(0, ChronoUnit.DAYS.between(startDate, endDate))
@@ -45,7 +45,7 @@ public class JobService implements IJobService {
                 .map(date -> Shift.builder()
                         .id(UUID.randomUUID())
                         .job(job)
-                        .startTime(date.atTime(8, 0, 0).toInstant(ZoneOffset.UTC))
+                        .startTime(date.atTime(9, 0, 0).toInstant(ZoneOffset.UTC))
                         .endTime(date.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
                         .build())
                 .collect(Collectors.toList()));
