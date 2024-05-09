@@ -1,6 +1,7 @@
 package com.zenjob.challenge.controller;
 
 import com.zenjob.challenge.dto.ResponseDto;
+import com.zenjob.challenge.service.IJobService;
 import com.zenjob.challenge.service.JobService;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/shift")
 @RequiredArgsConstructor
 public class ShiftController {
-    private final JobService jobService;
+    private final IJobService jobService;
 
     @GetMapping(path = "/{jobId}")
     @ResponseBody

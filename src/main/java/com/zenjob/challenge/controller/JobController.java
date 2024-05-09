@@ -2,6 +2,7 @@ package com.zenjob.challenge.controller;
 
 import com.zenjob.challenge.dto.ResponseDto;
 import com.zenjob.challenge.entity.Job;
+import com.zenjob.challenge.service.IJobService;
 import com.zenjob.challenge.service.JobService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ import java.util.UUID;
 @RequestMapping(path = "/job")
 @RequiredArgsConstructor
 public class JobController {
-    private final JobService jobService;
+    private final IJobService jobService;
 
     @PostMapping
     @ResponseBody

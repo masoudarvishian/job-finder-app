@@ -4,8 +4,11 @@ import com.zenjob.challenge.entity.Job;
 import com.zenjob.challenge.entity.Shift;
 import com.zenjob.challenge.repository.JobRepository;
 import com.zenjob.challenge.repository.ShiftRepository;
+import jdk.vm.ci.meta.Local;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -18,13 +21,17 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 @RequiredArgsConstructor
-@Repository
+@Service
 @Transactional
-public class JobService {
+public class JobService implements IJobService {
     private final JobRepository   jobRepository;
     private final ShiftRepository shiftRepository;
 
     public Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
+
+        if (startDate.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException();
+
         Job job = Job.builder()
                 .id(UUID.randomUUID())
                 .companyId(companyId)
