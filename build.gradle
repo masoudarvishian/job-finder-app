@@ -16,6 +16,10 @@ repositories {
     mavenCentral()
 }
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
