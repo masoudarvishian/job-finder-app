@@ -3,7 +3,6 @@ package com.zenjob.challenge.controller;
 import com.zenjob.challenge.dto.ResponseDto;
 import com.zenjob.challenge.entity.Job;
 import com.zenjob.challenge.service.IJobService;
-import com.zenjob.challenge.service.JobService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
