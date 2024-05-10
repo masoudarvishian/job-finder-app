@@ -3,6 +3,7 @@ package com.zenjob.challenge.rest_api.exceptionhandler;
 import com.zenjob.challenge.domain.exceptions.InvalidActionException;
 import com.zenjob.challenge.domain.exceptions.InvalidEndDateException;
 import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
+import com.zenjob.challenge.rest_api.dto.ErrorResponseDto;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

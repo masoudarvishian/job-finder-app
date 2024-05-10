@@ -1,4 +1,4 @@
-package com.zenjob.challenge.rest_api.exceptionhandler;
+package com.zenjob.challenge.rest_api.dto;
 
 import lombok.*;
 
