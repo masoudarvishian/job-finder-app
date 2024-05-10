@@ -38,7 +38,7 @@ public class JobController {
 
     @DeleteMapping(path = "/{id}/cancel")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void cancelJob(@PathVariable("id") UUID jobId, @RequestBody @Valid CancelJobRequestDto dto) {
+    public void cancelJob(@PathVariable("id") UUID jobId, @RequestBody @Valid JobController.CancelJobRequestDto dto) {
         jobService.cancelJob(dto.companyId, jobId);
     }
 
