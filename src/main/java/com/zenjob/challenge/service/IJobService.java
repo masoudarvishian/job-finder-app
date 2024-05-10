@@ -14,4 +14,6 @@ public interface IJobService {
     void bookTalent(UUID talent, UUID shiftId);
     void cancelJob(UUID companyId, UUID jobId);
     Optional<Job> getJob(UUID id);
+    void cancelShift(UUID companyId, UUID shiftId);
+    Optional<Shift> getShift(UUID id);
 }

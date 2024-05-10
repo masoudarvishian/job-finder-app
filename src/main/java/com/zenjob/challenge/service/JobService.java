@@ -74,4 +74,18 @@ public class JobService implements IJobService {
     public Optional<Job> getJob(UUID id) {
         return jobRepository.findById(id);
     }
+
+    @Override
+    public void cancelShift(UUID companyId, UUID shiftId) {
+        Optional<Shift> shift = getShift(shiftId);
+        if (!shift.get().getJob().getCompanyId().equals(companyId))
+            throw new InvalidActionException();
+
+        shiftRepository.deleteById(shiftId);
+    }
+
+    @Override
+    public Optional<Shift> getShift(UUID id) {
+        return shiftRepository.findById(id);
+    }
 }

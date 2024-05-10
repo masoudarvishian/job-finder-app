@@ -5,7 +5,6 @@ import com.zenjob.challenge.customexception.InvalidEndDateException;
 import com.zenjob.challenge.customexception.InvalidStartDateException;
 import com.zenjob.challenge.entity.Job;
 import com.zenjob.challenge.entity.Shift;
-import com.zenjob.challenge.repository.JobRepository;
 import com.zenjob.challenge.service.IJobService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootTest
@@ -119,5 +116,34 @@ public class JobServiceTests {
         // when - then
         Assertions.assertThrows(InvalidActionException.class, () ->
                 jobService.cancelJob(companyId, job.getId()));
+    }
+
+    @Test
+    public void cancel_a_single_shift_by_company() {
+        // given
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(5);
+        Job job = jobService.createJob(UUID.randomUUID(), startDate, endDate);
+        Shift firstShift = job.getShifts().get(0);
+
+        // when
+        jobService.cancelShift(job.getCompanyId(), firstShift.getId());
+
+        // then
+        Assertions.assertFalse(jobService.getShift(firstShift.getId()).isPresent());
+    }
+
+    @Test
+    public void a_company_can_only_cancel_its_own_shifts() {
+        // given
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(5);
+        Job job = jobService.createJob(UUID.randomUUID(), startDate, endDate);
+        Shift firstShift = job.getShifts().get(0);
+        UUID companyId = UUID.randomUUID();
+
+        // when - then
+        Assertions.assertThrows(InvalidActionException.class, () ->
+                jobService.cancelShift(companyId, firstShift.getId()));
     }
 }
