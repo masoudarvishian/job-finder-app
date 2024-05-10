@@ -3,6 +3,7 @@ package com.zenjob.challenge.rest.controller;
 import com.zenjob.challenge.rest.dto.ResponseDto;
 import com.zenjob.challenge.application.interfaces.JobService;
 import com.zenjob.challenge.rest.dto.shift.*;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class ShiftController {
 
     @PatchMapping(path = "/{id}/book")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void bookTalent(@PathVariable("id") UUID shiftId, @RequestBody @Valid BookTalentRequestDto dto) {
+    public void bookTalent(@PathVariable("id") UUID shiftId, @RequestBody @Valid BookTalentRequestDto dto) throws NotFoundException {
         jobService.bookTalent(dto.getTalentId(), shiftId);
     }
 
@@ -43,7 +44,7 @@ public class ShiftController {
 
     @DeleteMapping(path = "/{id}/cancel")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void cancelShift(@PathVariable("id") UUID shiftId, @RequestBody @Valid CancelShiftRequestDto dto) {
+    public void cancelShift(@PathVariable("id") UUID shiftId, @RequestBody @Valid CancelShiftRequestDto dto) throws NotFoundException {
         jobService.cancelShift(dto.getCompanyId(), shiftId);
     }
 

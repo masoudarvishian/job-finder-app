@@ -3,6 +3,7 @@ package com.zenjob.challenge.rest.exceptionhandler;
 import com.zenjob.challenge.domain.exceptions.InvalidActionException;
 import com.zenjob.challenge.domain.exceptions.InvalidEndDateException;
 import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
+import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +29,12 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseEntity<Object> handleCustomException(InvalidActionException ex) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.METHOD_NOT_ALLOWED.value(), ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<Object> handleCustomException(NotFoundException ex) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

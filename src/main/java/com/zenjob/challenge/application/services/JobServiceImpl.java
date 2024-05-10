@@ -8,6 +8,7 @@ import com.zenjob.challenge.domain.entity.Job;
 import com.zenjob.challenge.domain.entity.Shift;
 import com.zenjob.challenge.repository.JobRepository;
 import com.zenjob.challenge.repository.ShiftRepository;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,15 +43,19 @@ class JobServiceImpl implements JobService {
         return shiftRepository.findAllByJobId(id);
     }
 
-    public void bookTalent(UUID talentId, UUID shiftId) {
+    public void bookTalent(UUID talentId, UUID shiftId) throws NotFoundException {
         Optional<Shift> shiftById = shiftRepository.findById(shiftId);
+        if (!shiftById.isPresent())
+            throw new NotFoundException("Shift not found!");
         shiftById.get().setTalentId(talentId);
         shiftRepository.save(shiftById.get());
     }
 
     @Override
-    public void cancelJob(UUID companyId, UUID jobId) {
+    public void cancelJob(UUID companyId, UUID jobId) throws NotFoundException {
         Optional<Job> job = getJob(jobId);
+        if (!job.isPresent())
+            throw new NotFoundException("Job not found!");
         if (!job.get().getCompanyId().equals(companyId))
             throw new InvalidActionException("You cannot cancel job of other companies");
 
@@ -63,8 +68,10 @@ class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void cancelShift(UUID companyId, UUID shiftId) {
+    public void cancelShift(UUID companyId, UUID shiftId) throws NotFoundException {
         Optional<Shift> shift = getShift(shiftId);
+        if (!shift.isPresent())
+            throw new NotFoundException("Shift not found!");
         if (!shift.get().getJob().getCompanyId().equals(companyId))
             throw new InvalidActionException("You cannot cancel shift of other companies");
 

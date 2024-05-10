@@ -6,6 +6,7 @@ import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
 import com.zenjob.challenge.domain.entity.Job;
 import com.zenjob.challenge.domain.entity.Shift;
 import com.zenjob.challenge.application.interfaces.JobService;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class JobServiceTests {
     }
 
     @Test
-    public void cancel_a_job_and_its_shifts_by_company() {
+    public void cancel_a_job_and_its_shifts_by_company() throws NotFoundException {
         // given
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(5);
@@ -120,7 +121,7 @@ public class JobServiceTests {
     }
 
     @Test
-    public void cancel_a_single_shift_by_company() {
+    public void cancel_a_single_shift_by_company() throws NotFoundException {
         // given
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(5);
@@ -149,7 +150,7 @@ public class JobServiceTests {
     }
 
     @Test
-    public void cancel_shift_for_a_talent() {
+    public void cancel_shift_for_a_talent() throws NotFoundException {
         // given
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(5);

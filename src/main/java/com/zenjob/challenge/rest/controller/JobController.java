@@ -6,6 +6,7 @@ import com.zenjob.challenge.rest.dto.job.RequestJobResponseDto;
 import com.zenjob.challenge.rest.dto.ResponseDto;
 import com.zenjob.challenge.domain.entity.Job;
 import com.zenjob.challenge.application.interfaces.JobService;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class JobController {
 
     @DeleteMapping(path = "/{id}/cancel")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void cancelJob(@PathVariable("id") UUID jobId, @RequestBody @Valid CancelJobRequestDto dto) {
+    public void cancelJob(@PathVariable("id") UUID jobId, @RequestBody @Valid CancelJobRequestDto dto) throws NotFoundException {
         jobService.cancelJob(dto.getCompanyId(), jobId);
     }
 }
