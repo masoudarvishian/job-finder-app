@@ -53,7 +53,7 @@ public class ShiftController {
         jobService.cancelShift(dto.companyId, shiftId);
     }
 
-    @DeleteMapping(path = "/cancel-talent")
+    @PatchMapping(path = "/cancel-talent")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void cancelShiftForTalent(@RequestBody @Valid ShiftController.CancelShiftForTalentRequestDto dto) {
         jobService.cancelShiftForTalent(dto.companyId, dto.talentId);
