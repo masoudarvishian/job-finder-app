@@ -1,7 +1,7 @@
 package com.zenjob.challenge.rest.controller;
 
+import com.zenjob.challenge.application.interfaces.ShiftService;
 import com.zenjob.challenge.rest.dto.ResponseDto;
-import com.zenjob.challenge.application.interfaces.JobService;
 import com.zenjob.challenge.rest.dto.shift.*;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/shift")
 @RequiredArgsConstructor
 public class ShiftController {
-    private final JobService jobService;
+    private final ShiftService shiftService;
 
     @GetMapping(path = "/{jobId}")
     @ResponseBody
@@ -33,23 +33,23 @@ public class ShiftController {
     @PatchMapping(path = "/{id}/book")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void bookTalent(@PathVariable("id") UUID shiftId, @RequestBody @Valid BookTalentRequestDto dto) throws NotFoundException {
-        jobService.bookTalent(dto.getTalentId(), shiftId);
+        shiftService.bookTalent(dto.getTalentId(), shiftId);
     }
 
     @PatchMapping(path = "/cancel-talent")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void cancelShiftForTalent(@RequestBody @Valid CancelShiftForTalentRequestDto dto) {
-        jobService.cancelShiftForTalent(dto.getCompanyId(), dto.getTalentId());
+        shiftService.cancelShiftForTalent(dto.getCompanyId(), dto.getTalentId());
     }
 
     @DeleteMapping(path = "/{id}/cancel")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void cancelShift(@PathVariable("id") UUID shiftId, @RequestBody @Valid CancelShiftRequestDto dto) throws NotFoundException {
-        jobService.cancelShift(dto.getCompanyId(), shiftId);
+        shiftService.cancelShift(dto.getCompanyId(), shiftId);
     }
 
     private List<ShiftResponseDto> getShiftResponses(UUID uuid) {
-        return jobService.getShifts(uuid).stream()
+        return shiftService.getShifts(uuid).stream()
                 .map(shift -> ShiftResponseDto.builder()
                         .id(shift.getId())
                         .talentId(shift.getTalentId())

@@ -1,5 +1,6 @@
 package com.zenjob.challenge.application.services;
 
+import com.zenjob.challenge.application.interfaces.ShiftService;
 import com.zenjob.challenge.domain.exceptions.InvalidActionException;
 import com.zenjob.challenge.domain.exceptions.InvalidEndDateException;
 import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
@@ -24,6 +25,9 @@ public class JobServiceTests {
 
     @Autowired
     private JobService jobService;
+
+    @Autowired
+    private ShiftService shiftService;
 
     @Test
     public void job_should_have_at_least_one_shift() {
@@ -104,7 +108,7 @@ public class JobServiceTests {
 
         // then
         Assertions.assertFalse(jobService.getJob(job.getId()).isPresent());
-        Assertions.assertTrue(jobService.getShifts(job.getId()).isEmpty());
+        Assertions.assertTrue(shiftService.getShifts(job.getId()).isEmpty());
     }
 
     @Test
@@ -129,10 +133,10 @@ public class JobServiceTests {
         Shift firstShift = job.getShifts().get(0);
 
         // when
-        jobService.cancelShift(job.getCompanyId(), firstShift.getId());
+        shiftService.cancelShift(job.getCompanyId(), firstShift.getId());
 
         // then
-        Assertions.assertFalse(jobService.getShift(firstShift.getId()).isPresent());
+        Assertions.assertFalse(shiftService.getShift(firstShift.getId()).isPresent());
     }
 
     @Test
@@ -146,7 +150,7 @@ public class JobServiceTests {
 
         // when - then
         Assertions.assertThrows(InvalidActionException.class, () ->
-                jobService.cancelShift(companyId, firstShift.getId()));
+                shiftService.cancelShift(companyId, firstShift.getId()));
     }
 
     @Test
@@ -158,15 +162,15 @@ public class JobServiceTests {
         Shift firstShift = job.getShifts().get(0);
         Shift secondShift = job.getShifts().get(1);
         UUID talentId = UUID.randomUUID();
-        jobService.bookTalent(talentId, firstShift.getId());
-        jobService.bookTalent(talentId, secondShift.getId());
+        shiftService.bookTalent(talentId, firstShift.getId());
+        shiftService.bookTalent(talentId, secondShift.getId());
 
         // when
-        jobService.cancelShiftForTalent(job.getCompanyId(), talentId);
+        shiftService.cancelShiftForTalent(job.getCompanyId(), talentId);
 
         // then
-        Optional<Shift> firstShiftById = jobService.getShift(firstShift.getId());
-        Optional<Shift> secondShiftById = jobService.getShift(secondShift.getId());
+        Optional<Shift> firstShiftById = shiftService.getShift(firstShift.getId());
+        Optional<Shift> secondShiftById = shiftService.getShift(secondShift.getId());
         Assertions.assertNull(firstShiftById.get().getTalentId());
         Assertions.assertNull(secondShiftById.get().getTalentId());
     }

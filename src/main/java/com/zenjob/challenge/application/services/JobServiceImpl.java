@@ -7,7 +7,6 @@ import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
 import com.zenjob.challenge.domain.entity.Job;
 import com.zenjob.challenge.domain.entity.Shift;
 import com.zenjob.challenge.repository.JobRepository;
-import com.zenjob.challenge.repository.ShiftRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,7 +25,6 @@ import java.util.stream.LongStream;
 @Transactional
 class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
-    private final ShiftRepository shiftRepository;
 
     private static final int START_HOUR = 9;
     private static final int END_HOUR = 17;
@@ -37,18 +34,6 @@ class JobServiceImpl implements JobService {
         Job job = buildJob(companyId, startDate, endDate);
         setJobShifts(job, startDate, endDate);
         return jobRepository.save(job);
-    }
-
-    public List<Shift> getShifts(UUID id) {
-        return shiftRepository.findAllByJobId(id);
-    }
-
-    public void bookTalent(UUID talentId, UUID shiftId) throws NotFoundException {
-        Optional<Shift> shiftById = shiftRepository.findById(shiftId);
-        if (!shiftById.isPresent())
-            throw new NotFoundException("Shift not found!");
-        shiftById.get().setTalentId(talentId);
-        shiftRepository.save(shiftById.get());
     }
 
     @Override
@@ -65,31 +50,6 @@ class JobServiceImpl implements JobService {
     @Override
     public Optional<Job> getJob(UUID id) {
         return jobRepository.findById(id);
-    }
-
-    @Override
-    public void cancelShift(UUID companyId, UUID shiftId) throws NotFoundException {
-        Optional<Shift> shift = getShift(shiftId);
-        if (!shift.isPresent())
-            throw new NotFoundException("Shift not found!");
-        if (!shift.get().getJob().getCompanyId().equals(companyId))
-            throw new InvalidActionException("You cannot cancel shift of other companies");
-
-        shiftRepository.deleteById(shiftId);
-    }
-
-    @Override
-    public Optional<Shift> getShift(UUID id) {
-        return shiftRepository.findById(id);
-    }
-
-    @Override
-    public void cancelShiftForTalent(UUID companyId, UUID talentId) {
-        List<Shift> shifts = getShiftsByTalentIdAndCompanyId(talentId, companyId);
-        shifts.forEach(shift -> {
-            shift.setTalentId(null);
-            shiftRepository.save(shift);
-        });
     }
 
     private static Job buildJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
@@ -119,12 +79,5 @@ class JobServiceImpl implements JobService {
 
         if (endDate.isBefore(startDate))
             throw new InvalidEndDateException("End date cannot be before start date");
-    }
-
-    private List<Shift> getShiftsByTalentIdAndCompanyId(UUID talentId, UUID companyId) {
-        List<Shift> shifts = shiftRepository.findAllByTalentId(talentId);
-        return shifts.stream()
-                .filter(shift -> companyId.equals(shift.getJob().getCompanyId()))
-                .collect(Collectors.toList());
     }
 }
