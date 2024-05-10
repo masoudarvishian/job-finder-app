@@ -1,5 +1,6 @@
 package com.zenjob.challenge.service;
 
+import com.zenjob.challenge.customexception.InvalidActionException;
 import com.zenjob.challenge.customexception.InvalidEndDateException;
 import com.zenjob.challenge.customexception.InvalidStartDateException;
 import com.zenjob.challenge.entity.Job;
@@ -27,7 +28,6 @@ public class JobService implements IJobService {
     private final ShiftRepository shiftRepository;
 
     public Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
-
         if (startDate.isBefore(LocalDate.now()))
             throw new InvalidStartDateException();
 
@@ -59,5 +59,19 @@ public class JobService implements IJobService {
     public void bookTalent(UUID talent, UUID shiftId) {
         Optional<Shift> shiftById = shiftRepository.findById(shiftId);
         shiftById.map(shift -> shiftRepository.save(shift.setTalentId(talent)));
+    }
+
+    @Override
+    public void cancelJob(UUID companyId, UUID jobId) {
+        Optional<Job> job = getJob(jobId);
+        if (!job.get().getCompanyId().equals(companyId))
+            throw new InvalidActionException();
+
+        jobRepository.deleteById(jobId);
+    }
+
+    @Override
+    public Optional<Job> getJob(UUID id) {
+        return jobRepository.findById(id);
     }
 }

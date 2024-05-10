@@ -1,9 +1,11 @@
 package com.zenjob.challenge;
 
+import com.zenjob.challenge.customexception.InvalidActionException;
 import com.zenjob.challenge.customexception.InvalidEndDateException;
 import com.zenjob.challenge.customexception.InvalidStartDateException;
 import com.zenjob.challenge.entity.Job;
 import com.zenjob.challenge.entity.Shift;
+import com.zenjob.challenge.repository.JobRepository;
 import com.zenjob.challenge.service.IJobService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootTest
@@ -87,5 +91,33 @@ public class JobServiceTests {
         int startHour = zonedStartDateTime.getHour();
         int endHour = zonedEndDateTime.getHour();
         Assertions.assertTrue(startHour >= 9 && endHour <= 17);
+    }
+
+    @Test
+    public void cancel_a_job_and_its_shifts_by_company() {
+        // given
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(5);
+        Job job = jobService.createJob(UUID.randomUUID(), startDate, endDate);
+
+        // when
+        jobService.cancelJob(job.getCompanyId(), job.getId());
+
+        // then
+        Assertions.assertFalse(jobService.getJob(job.getId()).isPresent());
+        Assertions.assertTrue(jobService.getShifts(job.getId()).isEmpty());
+    }
+
+    @Test
+    public void a_company_can_only_cancel_its_own_jobs() {
+        // given
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(5);
+        Job job = jobService.createJob(UUID.randomUUID(), startDate, endDate);
+        UUID companyId = UUID.randomUUID();
+
+        // when - then
+        Assertions.assertThrows(InvalidActionException.class, () ->
+                jobService.cancelJob(companyId, job.getId()));
     }
 }
