@@ -28,28 +28,13 @@ class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final ShiftRepository shiftRepository;
 
+    private static final int START_HOUR = 9;
+    private static final int END_HOUR = 17;
+
     public Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
-        if (startDate.isBefore(LocalDate.now()))
-            throw new InvalidStartDateException("Start date cannot be before now");
-
-        if (endDate.isBefore(startDate))
-            throw new InvalidEndDateException("End date cannot be before start date");
-
-        Job job = Job.builder()
-                .id(UUID.randomUUID())
-                .companyId(companyId)
-                .startTime(startDate.atTime(9, 0, 0).toInstant(ZoneOffset.UTC))
-                .endTime(endDate.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
-                .build();
-        job.setShifts(LongStream.range(0, ChronoUnit.DAYS.between(startDate, endDate))
-                .mapToObj(idx -> startDate.plus(idx, ChronoUnit.DAYS))
-                .map(date -> Shift.builder()
-                        .id(UUID.randomUUID())
-                        .job(job)
-                        .startTime(date.atTime(9, 0, 0).toInstant(ZoneOffset.UTC))
-                        .endTime(date.atTime(17, 0, 0).toInstant(ZoneOffset.UTC))
-                        .build())
-                .collect(Collectors.toList()));
+        validateDates(startDate, endDate);
+        Job job = buildJob(companyId, startDate, endDate);
+        setJobShifts(job, startDate, endDate);
         return jobRepository.save(job);
     }
 
@@ -98,6 +83,35 @@ class JobServiceImpl implements JobService {
             shift.setTalentId(null);
             shiftRepository.save(shift);
         });
+    }
+
+    private static Job buildJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
+        return Job.builder()
+                .id(UUID.randomUUID())
+                .companyId(companyId)
+                .startTime(startDate.atTime(START_HOUR, 0, 0).toInstant(ZoneOffset.UTC))
+                .endTime(endDate.atTime(END_HOUR, 0, 0).toInstant(ZoneOffset.UTC))
+                .build();
+    }
+
+    private static void setJobShifts(Job job, LocalDate startDate, LocalDate endDate) {
+        job.setShifts(LongStream.range(0, ChronoUnit.DAYS.between(startDate, endDate))
+                .mapToObj(idx -> startDate.plus(idx, ChronoUnit.DAYS))
+                .map(date -> Shift.builder()
+                        .id(UUID.randomUUID())
+                        .job(job)
+                        .startTime(date.atTime(START_HOUR, 0, 0).toInstant(ZoneOffset.UTC))
+                        .endTime(date.atTime(END_HOUR, 0, 0).toInstant(ZoneOffset.UTC))
+                        .build())
+                .collect(Collectors.toList()));
+    }
+
+    private static void validateDates(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isBefore(LocalDate.now()))
+            throw new InvalidStartDateException("Start date cannot be before now");
+
+        if (endDate.isBefore(startDate))
+            throw new InvalidEndDateException("End date cannot be before start date");
     }
 
     private List<Shift> getShiftsByTalentIdAndCompanyId(UUID talentId, UUID companyId) {

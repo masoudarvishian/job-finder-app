@@ -21,15 +21,7 @@ public class ShiftController {
     @GetMapping(path = "/{jobId}")
     @ResponseBody
     public ResponseDto<GetShiftsResponseDto> getShifts(@PathVariable("jobId") UUID uuid) {
-        List<ShiftResponseDto> shiftResponses = jobService.getShifts(uuid).stream()
-                .map(shift -> ShiftResponseDto.builder()
-                        .id(shift.getId())
-                        .talentId(shift.getTalentId())
-                        .jobId(shift.getJob().getId())
-                        .start(shift.getCreatedAt())
-                        .end(shift.getEndTime())
-                        .build())
-                .collect(Collectors.toList());
+        List<ShiftResponseDto> shiftResponses = getShiftResponses(uuid);
         return ResponseDto.<GetShiftsResponseDto>builder()
                 .data(GetShiftsResponseDto.builder()
                         .shifts(shiftResponses)
@@ -53,5 +45,17 @@ public class ShiftController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void cancelShift(@PathVariable("id") UUID shiftId, @RequestBody @Valid CancelShiftRequestDto dto) {
         jobService.cancelShift(dto.getCompanyId(), shiftId);
+    }
+
+    private List<ShiftResponseDto> getShiftResponses(UUID uuid) {
+        return jobService.getShifts(uuid).stream()
+                .map(shift -> ShiftResponseDto.builder()
+                        .id(shift.getId())
+                        .talentId(shift.getTalentId())
+                        .jobId(shift.getJob().getId())
+                        .start(shift.getCreatedAt())
+                        .end(shift.getEndTime())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
