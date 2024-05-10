@@ -44,7 +44,7 @@ public class ShiftController {
     @PatchMapping(path = "/{id}/book")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void bookTalent(@PathVariable("id") UUID shiftId, @RequestBody @Valid ShiftController.BookTalentRequestDto dto) {
-        jobService.bookTalent(shiftId, dto.talent);
+        jobService.bookTalent(dto.talent, shiftId);
     }
 
     @DeleteMapping(path = "/{id}/cancel")
@@ -53,9 +53,22 @@ public class ShiftController {
         jobService.cancelShift(dto.companyId, shiftId);
     }
 
+    @DeleteMapping(path = "/cancel-talent")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void cancelShiftForTalent(@RequestBody @Valid ShiftController.CancelShiftForTalentRequestDto dto) {
+        jobService.cancelShiftForTalent(dto.companyId, dto.talentId);
+    }
+
     @NoArgsConstructor
     @Data
     private static class CancelShiftRequestDto {
+        UUID companyId;
+    }
+
+    @NoArgsConstructor
+    @Data
+    private static class CancelShiftForTalentRequestDto {
+        UUID talentId;
         UUID companyId;
     }
 

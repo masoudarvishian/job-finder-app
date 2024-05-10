@@ -161,7 +161,7 @@ public class JobServiceTests {
         jobService.bookTalent(talentId, secondShift.getId());
 
         // when
-        jobService.cancelShiftForTalent(job.getCompanyId(), talentId, firstShift.getId());
+        jobService.cancelShiftForTalent(job.getCompanyId(), talentId);
 
         // then
         Optional<Shift> firstShiftById = jobService.getShift(firstShift.getId());

@@ -57,8 +57,12 @@ public class JobService implements IJobService {
     }
 
     public void bookTalent(UUID talentId, UUID shiftId) {
+//        Optional<Shift> shiftById = shiftRepository.findById(shiftId);
+//        shiftById.map(shift -> shiftRepository.save(shift.setTalentId(talentId)));
+
         Optional<Shift> shiftById = shiftRepository.findById(shiftId);
-        shiftById.map(shift -> shiftRepository.save(shift.setTalentId(talentId)));
+        shiftById.get().setTalentId(talentId);
+        shiftRepository.save(shiftById.get());
     }
 
     @Override
@@ -90,7 +94,7 @@ public class JobService implements IJobService {
     }
 
     @Override
-    public void cancelShiftForTalent(UUID companyId, UUID talentId, UUID shiftId) {
+    public void cancelShiftForTalent(UUID companyId, UUID talentId) {
         List<Shift> shifts = getShiftsByTalentIdAndCompanyId(talentId, companyId);
         shifts.forEach(shift -> {
             shift.setTalentId(null);

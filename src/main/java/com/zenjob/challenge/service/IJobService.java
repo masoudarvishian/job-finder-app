@@ -16,5 +16,5 @@ public interface IJobService {
     Optional<Job> getJob(UUID id);
     void cancelShift(UUID companyId, UUID shiftId);
     Optional<Shift> getShift(UUID id);
-    void cancelShiftForTalent(UUID companyId, UUID talentId, UUID shiftId);
+    void cancelShiftForTalent(UUID companyId, UUID talentId);
 }
