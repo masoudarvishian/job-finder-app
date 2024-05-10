@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/job")
+@RequestMapping(path = "/api/v1/job")
 @RequiredArgsConstructor
 public class JobController {
     private final JobService jobService;

@@ -53,6 +53,17 @@ public class JobServiceTests {
     }
 
     @Test
+    public void start_date_should_not_be_equal_to_end_date() {
+        // given
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
+
+        // when - then
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                jobService.createJob(UUID.randomUUID(), startDate, endDate));
+    }
+
+    @Test
     public void the_end_date_should_be_after_the_start_date() {
         // given
         LocalDate startDate = LocalDate.now().plusDays(1);

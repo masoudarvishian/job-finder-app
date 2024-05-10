@@ -74,6 +74,11 @@ class JobServiceImpl implements JobService {
     }
 
     private static void validateDates(LocalDate startDate, LocalDate endDate) {
+
+        if (startDate.isEqual(endDate)) {
+            throw new IllegalArgumentException("Start date and end date should not be equal");
+        }
+
         if (startDate.isBefore(LocalDate.now()))
             throw new InvalidStartDateException("Start date cannot be before now");
 

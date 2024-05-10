@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/shift")
+@RequestMapping(path = "/api/v1/shift")
 @RequiredArgsConstructor
 public class ShiftController {
     private final ShiftService shiftService;
