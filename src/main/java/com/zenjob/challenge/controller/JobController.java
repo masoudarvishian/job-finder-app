@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping(path = "/job")
 @RequiredArgsConstructor
 public class JobController {

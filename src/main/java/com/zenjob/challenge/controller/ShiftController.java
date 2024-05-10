@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping(path = "/shift")
 @RequiredArgsConstructor
 public class ShiftController {
