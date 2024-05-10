@@ -1,8 +1,8 @@
-package com.zenjob.challenge.rest.controller;
+package com.zenjob.challenge.rest_api.controller;
 
 import com.zenjob.challenge.application.interfaces.ShiftService;
-import com.zenjob.challenge.rest.dto.ResponseDto;
-import com.zenjob.challenge.rest.dto.shift.*;
+import com.zenjob.challenge.rest_api.dto.ResponseDto;
+import com.zenjob.challenge.rest_api.dto.shift.*;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

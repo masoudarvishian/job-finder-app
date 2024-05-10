@@ -1,4 +1,4 @@
-package com.zenjob.challenge.rest.exceptionhandler;
+package com.zenjob.challenge.rest_api.exceptionhandler;
 
 import com.zenjob.challenge.domain.exceptions.InvalidActionException;
 import com.zenjob.challenge.domain.exceptions.InvalidEndDateException;

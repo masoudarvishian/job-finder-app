@@ -1,4 +1,4 @@
-package com.zenjob.challenge.rest.dto.shift;
+package com.zenjob.challenge.rest_api.dto.job;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,6 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @Data
-public class CancelShiftForTalentRequestDto {
-    private UUID talentId;
+public class CancelJobRequestDto {
     private UUID companyId;
 }

@@ -1,9 +1,9 @@
-package com.zenjob.challenge.rest.controller;
+package com.zenjob.challenge.rest_api.controller;
 
-import com.zenjob.challenge.rest.dto.job.CancelJobRequestDto;
-import com.zenjob.challenge.rest.dto.job.RequestJobRequestDto;
-import com.zenjob.challenge.rest.dto.job.RequestJobResponseDto;
-import com.zenjob.challenge.rest.dto.ResponseDto;
+import com.zenjob.challenge.rest_api.dto.job.CancelJobRequestDto;
+import com.zenjob.challenge.rest_api.dto.job.RequestJobRequestDto;
+import com.zenjob.challenge.rest_api.dto.job.RequestJobResponseDto;
+import com.zenjob.challenge.rest_api.dto.ResponseDto;
 import com.zenjob.challenge.domain.entity.Job;
 import com.zenjob.challenge.application.interfaces.JobService;
 import javassist.NotFoundException;

@@ -1,4 +1,4 @@
-package com.zenjob.challenge.rest.config;
+package com.zenjob.challenge.application.config;
 
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;

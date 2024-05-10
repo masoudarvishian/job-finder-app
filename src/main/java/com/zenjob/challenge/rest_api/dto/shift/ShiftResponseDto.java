@@ -1,4 +1,4 @@
-package com.zenjob.challenge.rest.dto.shift;
+package com.zenjob.challenge.rest_api.dto.shift;
 
 import lombok.Builder;
 import lombok.Data;
