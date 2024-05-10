@@ -24,7 +24,7 @@ import java.util.stream.LongStream;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class JobServiceImpl implements JobService {
+class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final ShiftRepository shiftRepository;
 
