@@ -29,10 +29,10 @@ public class JobService implements IJobService {
 
     public Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
         if (startDate.isBefore(LocalDate.now()))
-            throw new InvalidStartDateException();
+            throw new InvalidStartDateException("Start date cannot be before now");
 
         if (endDate.isBefore(startDate))
-            throw new InvalidEndDateException();
+            throw new InvalidEndDateException("End date cannot be before start date");
 
         Job job = Job.builder()
                 .id(UUID.randomUUID())
@@ -57,9 +57,6 @@ public class JobService implements IJobService {
     }
 
     public void bookTalent(UUID talentId, UUID shiftId) {
-//        Optional<Shift> shiftById = shiftRepository.findById(shiftId);
-//        shiftById.map(shift -> shiftRepository.save(shift.setTalentId(talentId)));
-
         Optional<Shift> shiftById = shiftRepository.findById(shiftId);
         shiftById.get().setTalentId(talentId);
         shiftRepository.save(shiftById.get());
@@ -69,7 +66,7 @@ public class JobService implements IJobService {
     public void cancelJob(UUID companyId, UUID jobId) {
         Optional<Job> job = getJob(jobId);
         if (!job.get().getCompanyId().equals(companyId))
-            throw new InvalidActionException();
+            throw new InvalidActionException("You cannot cancel job of other companies");
 
         jobRepository.deleteById(jobId);
     }
@@ -83,7 +80,7 @@ public class JobService implements IJobService {
     public void cancelShift(UUID companyId, UUID shiftId) {
         Optional<Shift> shift = getShift(shiftId);
         if (!shift.get().getJob().getCompanyId().equals(companyId))
-            throw new InvalidActionException();
+            throw new InvalidActionException("You cannot cancel shift of other companies");
 
         shiftRepository.deleteById(shiftId);
     }
