@@ -11,4 +11,5 @@ public interface JobService {
     Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate);
     void cancelJob(UUID companyId, UUID jobId) throws NotFoundException;
     Optional<Job> getJob(UUID id);
+    void clearAllJobs();
 }

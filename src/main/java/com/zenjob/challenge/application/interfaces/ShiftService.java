@@ -13,4 +13,5 @@ public interface ShiftService {
     void cancelShift(UUID companyId, UUID shiftId) throws NotFoundException;
     Optional<Shift> getShift(UUID id);
     void cancelShiftForTalent(UUID companyId, UUID talentId);
+    void clearAllShifts();
 }

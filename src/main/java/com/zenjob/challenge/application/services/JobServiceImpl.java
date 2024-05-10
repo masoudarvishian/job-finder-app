@@ -52,6 +52,11 @@ class JobServiceImpl implements JobService {
         return jobRepository.findById(id);
     }
 
+    @Override
+    public void clearAllJobs() {
+        jobRepository.deleteAll();
+    }
+
     private static Job buildJob(UUID companyId, LocalDate startDate, LocalDate endDate) {
         return Job.builder()
                 .id(UUID.randomUUID())

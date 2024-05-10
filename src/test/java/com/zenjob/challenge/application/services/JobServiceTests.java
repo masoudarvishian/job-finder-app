@@ -8,9 +8,11 @@ import com.zenjob.challenge.domain.entity.Job;
 import com.zenjob.challenge.domain.entity.Shift;
 import com.zenjob.challenge.application.interfaces.JobService;
 import javassist.NotFoundException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
@@ -27,6 +29,12 @@ public class JobServiceTests {
 
     @Autowired
     private ShiftService shiftService;
+
+    @AfterEach
+    public void cleanUpDatabase() {
+        shiftService.clearAllShifts();
+        jobService.clearAllJobs();
+    }
 
     @Test
     public void job_should_have_at_least_one_shift() {

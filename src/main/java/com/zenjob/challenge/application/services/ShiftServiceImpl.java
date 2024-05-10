@@ -60,6 +60,11 @@ public class ShiftServiceImpl implements ShiftService {
         });
     }
 
+    @Override
+    public void clearAllShifts() {
+        shiftRepository.deleteAll();
+    }
+
     private List<Shift> getShiftsByTalentIdAndCompanyId(UUID talentId, UUID companyId) {
         List<Shift> shifts = shiftRepository.findAllByTalentId(talentId);
         return shifts.stream()
