@@ -1,11 +1,11 @@
-package com.zenjob.challenge;
+package com.zenjob.challenge.application.services;
 
-import com.zenjob.challenge.customexception.InvalidActionException;
-import com.zenjob.challenge.customexception.InvalidEndDateException;
-import com.zenjob.challenge.customexception.InvalidStartDateException;
-import com.zenjob.challenge.entity.Job;
-import com.zenjob.challenge.entity.Shift;
-import com.zenjob.challenge.service.IJobService;
+import com.zenjob.challenge.domain.exceptions.InvalidActionException;
+import com.zenjob.challenge.domain.exceptions.InvalidEndDateException;
+import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
+import com.zenjob.challenge.domain.entity.Job;
+import com.zenjob.challenge.domain.entity.Shift;
+import com.zenjob.challenge.application.interfaces.JobService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class JobServiceTests {
 
     @Autowired
-    private IJobService jobService;
+    private JobService jobService;
 
     @Test
     public void job_should_have_at_least_one_shift() {

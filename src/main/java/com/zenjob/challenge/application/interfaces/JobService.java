@@ -1,14 +1,14 @@
-package com.zenjob.challenge.service;
+package com.zenjob.challenge.application.interfaces;
 
-import com.zenjob.challenge.entity.Job;
-import com.zenjob.challenge.entity.Shift;
+import com.zenjob.challenge.domain.entity.Job;
+import com.zenjob.challenge.domain.entity.Shift;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface IJobService {
+public interface JobService {
     Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate);
     List<Shift> getShifts(UUID id);
     void bookTalent(UUID talent, UUID shiftId);

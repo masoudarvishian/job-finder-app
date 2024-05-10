@@ -1,4 +1,4 @@
-package com.zenjob.challenge.dto;
+package com.zenjob.challenge.rest.dto;
 
 import lombok.Builder;
 import lombok.Data;

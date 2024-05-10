@@ -1,4 +1,4 @@
-package com.zenjob.challenge.customexception;
+package com.zenjob.challenge.domain.exceptions;
 
 public class InvalidStartDateException extends RuntimeException {
     public InvalidStartDateException() {

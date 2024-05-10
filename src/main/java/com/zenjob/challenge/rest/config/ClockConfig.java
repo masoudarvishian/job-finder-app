@@ -1,4 +1,4 @@
-package com.zenjob.challenge.config;
+package com.zenjob.challenge.rest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

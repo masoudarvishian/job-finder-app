@@ -1,10 +1,11 @@
-package com.zenjob.challenge.service;
+package com.zenjob.challenge.application.services;
 
-import com.zenjob.challenge.customexception.InvalidActionException;
-import com.zenjob.challenge.customexception.InvalidEndDateException;
-import com.zenjob.challenge.customexception.InvalidStartDateException;
-import com.zenjob.challenge.entity.Job;
-import com.zenjob.challenge.entity.Shift;
+import com.zenjob.challenge.application.interfaces.JobService;
+import com.zenjob.challenge.domain.exceptions.InvalidActionException;
+import com.zenjob.challenge.domain.exceptions.InvalidEndDateException;
+import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
+import com.zenjob.challenge.domain.entity.Job;
+import com.zenjob.challenge.domain.entity.Shift;
 import com.zenjob.challenge.repository.JobRepository;
 import com.zenjob.challenge.repository.ShiftRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ import java.util.stream.LongStream;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class JobService implements IJobService {
-    private final JobRepository   jobRepository;
+public class JobServiceImpl implements JobService {
+    private final JobRepository jobRepository;
     private final ShiftRepository shiftRepository;
 
     public Job createJob(UUID companyId, LocalDate startDate, LocalDate endDate) {

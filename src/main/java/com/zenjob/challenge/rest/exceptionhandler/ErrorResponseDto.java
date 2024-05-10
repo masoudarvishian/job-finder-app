@@ -1,4 +1,4 @@
-package com.zenjob.challenge.exceptionhandler;
+package com.zenjob.challenge.rest.exceptionhandler;
 
 import lombok.*;
 

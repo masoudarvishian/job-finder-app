@@ -1,8 +1,8 @@
-package com.zenjob.challenge.exceptionhandler;
+package com.zenjob.challenge.rest.exceptionhandler;
 
-import com.zenjob.challenge.customexception.InvalidActionException;
-import com.zenjob.challenge.customexception.InvalidEndDateException;
-import com.zenjob.challenge.customexception.InvalidStartDateException;
+import com.zenjob.challenge.domain.exceptions.InvalidActionException;
+import com.zenjob.challenge.domain.exceptions.InvalidEndDateException;
+import com.zenjob.challenge.domain.exceptions.InvalidStartDateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,6 +1,7 @@
-package com.zenjob.challenge.entity;
+package com.zenjob.challenge.domain.entity;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -8,19 +9,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "job_process")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
+@Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-public class Job {
+public class Shift {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
@@ -28,20 +27,18 @@ public class Job {
     @Version
     private long version;
 
+    @ManyToOne
     @NotNull
-    private UUID companyId;
+    private Job job;
+
+    private UUID talentId;
 
     private Instant startTime;
     private Instant endTime;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "job", orphanRemoval = true)
-    @Builder.Default
-    private List<Shift> shifts = new ArrayList<>();
 
     @CreatedDate
     private Instant createdAt;
 
     @LastModifiedDate
     private Instant updatedAt;
-
 }
