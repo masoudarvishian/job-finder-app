@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class ShiftServiceImpl implements ShiftService {
+class ShiftServiceImpl implements ShiftService {
 
     private final ShiftRepository shiftRepository;
 
