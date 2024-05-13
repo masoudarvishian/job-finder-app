@@ -11,8 +11,9 @@ import javassist.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
@@ -20,6 +21,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 @SpringBootTest
 public class JobServiceTests {
@@ -55,9 +59,13 @@ public class JobServiceTests {
         LocalDate startDate = LocalDate.now().minusDays(10);
         LocalDate endDate = LocalDate.now().plusDays(2);
 
-        // when - then
-        Assertions.assertThrows(InvalidStartDateException.class, () ->
-                jobService.createJob(UUID.randomUUID(), startDate, endDate));
+        // When
+        Throwable throwable = catchThrowable(() ->
+            jobService.createJob(UUID.randomUUID(), startDate, endDate)
+        );
+
+        // Then
+        assertThat(throwable).isInstanceOf(InvalidStartDateException.class);
     }
 
     @Test
@@ -66,9 +74,11 @@ public class JobServiceTests {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now();
 
-        // when - then
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                jobService.createJob(UUID.randomUUID(), startDate, endDate));
+        // when
+        Throwable throwable = catchThrowable(() -> jobService.createJob(UUID.randomUUID(), startDate, endDate));
+
+        // then
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -77,9 +87,11 @@ public class JobServiceTests {
         LocalDate startDate = LocalDate.now().plusDays(1);
         LocalDate endDate = LocalDate.now();
 
-        // when - then
-        Assertions.assertThrows(InvalidEndDateException.class, () ->
-                jobService.createJob(UUID.randomUUID(), startDate, endDate));
+        // when
+        Throwable throwable = catchThrowable(() -> jobService.createJob(UUID.randomUUID(), startDate, endDate));
+
+        // then
+        assertThat(throwable).isInstanceOf(InvalidEndDateException.class);
     }
 
     @Test
@@ -137,8 +149,10 @@ public class JobServiceTests {
         Job job = jobService.createJob(UUID.randomUUID(), startDate, endDate);
         UUID companyId = UUID.randomUUID();
 
-        // when - then
-        Assertions.assertThrows(InvalidActionException.class, () ->
-                jobService.cancelJob(companyId, job.getId()));
+        // when
+        Throwable throwable = catchThrowable(() -> jobService.cancelJob(companyId, job.getId()));
+
+        // then
+        assertThat(throwable).isInstanceOf(InvalidActionException.class);
     }
 }

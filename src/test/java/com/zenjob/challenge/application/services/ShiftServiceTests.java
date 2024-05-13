@@ -10,12 +10,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 @SpringBootTest
 public class ShiftServiceTests {
@@ -56,9 +58,11 @@ public class ShiftServiceTests {
         Shift firstShift = job.getShifts().get(0);
         UUID companyId = UUID.randomUUID();
 
-        // when - then
-        Assertions.assertThrows(InvalidActionException.class, () ->
-                shiftService.cancelShift(companyId, firstShift.getId()));
+        // when
+        Throwable throwable = catchThrowable(() -> shiftService.cancelShift(companyId, firstShift.getId()));
+
+        // then
+        assertThat(throwable).isInstanceOf(InvalidActionException.class);
     }
 
     @Test
